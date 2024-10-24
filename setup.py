@@ -123,7 +123,7 @@ setup(
         "Topic :: Text Editors :: Text Processing",
     ],
     extras_require={
-        "testing": ["pytest", "twine", "setuptools", "wheel", ],
+        "testing": ["pytest", "twine", "setuptools", "wheel", "psutil"],
     },
     python_requires=">=3.8",
 )

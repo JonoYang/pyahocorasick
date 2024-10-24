@@ -7,9 +7,10 @@
     License   : public domain
 """
 
+import gc
 import os
 from pathlib import Path
-
+import psutil
 import pytest
 
 import ahocorasick
@@ -17,10 +18,14 @@ import ahocorasick
 from pytestingutils import conv
 from pytestingutils import on_linux
 
+import tracemalloc
+tracemalloc.start()
+
 
 def get_memory_usage():
     # Linux only
     pid = os.getpid()
+    print(psutil.Process(pid).memory_info())
 
     lines = []
     try:
@@ -30,6 +35,7 @@ def get_memory_usage():
         pass
 
     for line in lines:
+        print(line)
         if line.startswith('VmSize'):
             return float(line.split()[1])
 
@@ -58,6 +64,7 @@ def test_does_not_leak_memory():
 
     for i in range(1024):
         s = list(ac.keys())
+    gc.collect()
 
     after = get_memory_usage()
     assert before == after
